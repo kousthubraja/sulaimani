@@ -26,4 +26,13 @@ public class Menu extends Activity {
 		Intent i = new Intent(getBaseContext(), Order.class);
 		startActivity(i);
 	}
+	
+	public void openCancel(View v){
+		Intent i = new Intent(getBaseContext(), Cancel.class);
+		startActivity(i);
+	}
+	
+	public void exit(View v){
+		finish();
+	}
 }

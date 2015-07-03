@@ -23,17 +23,10 @@ import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.DragEvent;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.View.OnClickListener;
-import android.view.ViewGroup;
 import android.view.Window;
-import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.ListView;
-import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
@@ -72,19 +65,15 @@ public class Order extends Activity {
 					JSONObject tmp = new JSONObject();
 					tmp.put(String.valueOf(temp.id), temp.quantity);
 					items.put(tmp);
-					totalPrice += temp.price;
+					totalPrice += temp.price*temp.quantity;
 				}
-				//Toast.makeText(context, temp.getItemName(), Toast.LENGTH_SHORT).show();
 			}
-//			Toast.makeText(context, items.toString(), Toast.LENGTH_LONG).show();
+
 			order.put("items", items);
-//			Toast.makeText(context, order.toString(), Toast.LENGTH_LONG).show();
-//			TextView txtPrice = (TextView) findViewById(R.id.totalPrice);
-//			setContentView(R.layout.screen_payment);
-//			txtPrice.setText(String.valueOf(totalPrice));
+			
 			String orderJSON = order.toString();
 			
-			sendOrder(orderJSON);
+			sendOrder(orderJSON, totalPrice);
 			
 		} catch (JSONException e) {
 			// TODO Auto-generated catch block
@@ -123,9 +112,9 @@ public class Order extends Activity {
 	public void confirmPay(View v){
 		Toast.makeText(context, "Payment done", Toast.LENGTH_LONG).show();
 		
-		Intent i = new Intent(getBaseContext(), Menu.class);
+		
 		finish();
-		startActivity(i);
+		
 	}
 	
 	public void chooseDate(View v){
@@ -204,7 +193,7 @@ public class Order extends Activity {
 
     }
 	
-	void sendOrder(String orderJSON){
+	void sendOrder(String orderJSON, final double totalPrice){
 		new AsyncTask<String, Void, Void>() {
 
     		HttpEntity entity = null;
@@ -218,9 +207,7 @@ public class Order extends Activity {
 				if(output != null ){
 					
 					Toast.makeText(context, output, Toast.LENGTH_LONG).show();
-					
-					Intent i = new Intent(getBaseContext(), Menu.class);
-					startActivity(i);
+
 					finish();
 
 				}
@@ -238,6 +225,7 @@ public class Order extends Activity {
 					List<NameValuePair> par = new ArrayList<NameValuePair>(2);
 					par.add(new BasicNameValuePair("userId", String.valueOf(sharedPref.getInt("userId", 0))));
 					par.add(new BasicNameValuePair("orderJSON", orderJSON[0]));
+					par.add(new BasicNameValuePair("totalPrice", String.valueOf(totalPrice)));
 					par.add(new BasicNameValuePair("date", getDateTime()));
 					httppost.setEntity(new UrlEncodedFormEntity(par, "UTF-8"));
 					HttpResponse response = httpclient.execute(httppost);

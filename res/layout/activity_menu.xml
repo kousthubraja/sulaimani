@@ -10,8 +10,16 @@
         android:layout_width="150dp"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:text="Order"
-        android:onClick="openOrder" />
+        android:onClick="openOrder"
+        android:text="New Order" />
+    
+    <Button
+        android:id="@+id/button4"
+        android:layout_width="150dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:onClick="openCancel"
+        android:text="Cancel Order" />
     
     <Button
         android:id="@+id/button2"
@@ -27,6 +35,6 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:text="Exit"
-        android:onClick="openFeedback" />
+        android:onClick="exit" />
 
 </LinearLayout>

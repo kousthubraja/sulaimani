@@ -7,11 +7,40 @@
     android:layout_marginTop="20dp"
      >
 
+<RelativeLayout
+    android:id="@+id/rel2"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:paddingLeft="30dp"
+    android:paddingRight="15dp" >
+
+        <TextView
+            android:id="@+id/textView2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentTop="true"
+            android:text="Item"
+            android:textAppearance="?android:attr/textAppearanceLarge" />
+
+        <TextView
+            android:id="@+id/textView3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentTop="true"
+            android:text="Price &amp; Quantity"
+            android:textAppearance="?android:attr/textAppearanceLarge" />
+         </RelativeLayout>
+         
     <ListView
         android:id="@+id/listView1"
         android:layout_width="match_parent"
         android:layout_height="404dp"
+        android:layout_above="@+id/button1"
+        android:layout_below="@+id/rel2"
         android:padding="@dimen/activity_horizontal_margin" >
+
     </ListView>
 
 <Button
@@ -22,7 +51,5 @@
     android:layout_alignParentRight="true"
     android:onClick="chooseDate"
     android:text="Choose Date" />
-
-
 
 </RelativeLayout>

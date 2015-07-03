@@ -73,9 +73,9 @@ public class Feedback extends Activity {
 				
 				if(output != null){
 					Toast.makeText(getApplicationContext(), "Feedback Sent", Toast.LENGTH_LONG).show();
-					Intent i = new Intent(getBaseContext(), Menu.class);
+					//Intent i = new Intent(getBaseContext(), Menu.class);
 					finish();
-					startActivity(i);
+					//startActivity(i);
 				}
 				
 				super.onPostExecute(result);
