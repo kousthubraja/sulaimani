@@ -15,6 +15,7 @@ import org.apache.http.util.EntityUtils;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -37,7 +38,7 @@ public class Feedback extends Activity {
         setContentView(R.layout.activity_feedback);
         sharedPref = getSharedPreferences("userAuth",Context.MODE_PRIVATE);
         txtfeedback = (EditText) findViewById(R.id.txtfeedback);
-        Toast.makeText(this, String.valueOf(sharedPref.getInt("userId", 0)), Toast.LENGTH_SHORT).show();
+//        Toast.makeText(this, String.valueOf(sharedPref.getInt("userId", 0)), Toast.LENGTH_SHORT).show();
         //registerUser();
     }
 
@@ -69,9 +70,12 @@ public class Feedback extends Activity {
     		
 			@Override
 			protected void onPostExecute(Void result) {
-				txtfeedback.setText("finish");
+				
 				if(output != null){
-					txtfeedback.setText(output);
+					Toast.makeText(getApplicationContext(), "Feedback Sent", Toast.LENGTH_LONG).show();
+					Intent i = new Intent(getBaseContext(), Menu.class);
+					finish();
+					startActivity(i);
 				}
 				
 				super.onPostExecute(result);
