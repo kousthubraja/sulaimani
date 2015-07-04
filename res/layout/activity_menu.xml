@@ -2,15 +2,18 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_marginTop="80dp"
-    android:orientation="vertical" >
+    android:orientation="vertical"
+    android:background="@drawable/cupcake" >
 
     <Button
         android:id="@+id/button1"
         android:layout_width="150dp"
         android:layout_height="wrap_content"
+        android:layout_marginTop="80dp"
         android:layout_gravity="center"
         android:onClick="openOrder"
+        android:background="@drawable/custombutton"
+        android:textColor="#a8a8a8"
         android:text="New Order" />
     
     <Button
@@ -18,7 +21,10 @@
         android:layout_width="150dp"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
+        android:layout_marginTop="10dp"
+        android:background="@drawable/custombutton"
         android:onClick="openCancel"
+        android:textColor="#a8a8a8"
         android:text="Cancel Order" />
     
     <Button
@@ -26,6 +32,9 @@
         android:layout_width="150dp"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
+        android:layout_marginTop="10dp"
+        android:textColor="#a8a8a8"
+        android:background="@drawable/custombutton"
         android:text="Send Feedback"
         android:onClick="openFeedback" />
     
@@ -33,6 +42,9 @@
         android:id="@+id/button3"
         android:layout_width="150dp"
         android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:background="@drawable/custombutton"
+        android:textColor="#a8a8a8"
         android:layout_gravity="center"
         android:text="Exit"
         android:onClick="exit" />

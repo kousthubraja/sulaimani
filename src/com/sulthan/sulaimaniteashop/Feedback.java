@@ -28,68 +28,51 @@ import android.widget.Toast;
 
 public class Feedback extends Activity {
 
-	EditText txtfeedback;
-	SharedPreferences sharedPref;
+	private static final String SERVER_URL = "http://sutest.comuv.com/";
+	Context context;
+	private SharedPreferences sharedPref;
+	
+	private EditText txtfeedback;
 	
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         getActionBar().setTitle("Send Feedback");
         setContentView(R.layout.activity_feedback);
+
+        //sharedPref used to get the locally saved user details
         sharedPref = getSharedPreferences("userAuth",Context.MODE_PRIVATE);
         txtfeedback = (EditText) findViewById(R.id.txtfeedback);
-//        Toast.makeText(this, String.valueOf(sharedPref.getInt("userId", 0)), Toast.LENGTH_SHORT).show();
-        //registerUser();
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.feedback, menu);
-        return true;
-    }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-        if (id == R.id.action_settings) {
-            return true;
-        }
-        return super.onOptionsItemSelected(item);
-    }
     
     public void sendFeedback(View v){
+    	final String feedback = txtfeedback.getText().toString().trim();
+    	if(feedback.equals("")){
+    		Toast.makeText(getApplicationContext(), "Enter your feedback", Toast.LENGTH_SHORT).show();
+    		return;
+    	}
+    	
+    	Toast.makeText(getApplicationContext(), "Sending feedback", Toast.LENGTH_SHORT).show();
     	
     	new AsyncTask<Void, Void, Void>() {
-
-    		HttpEntity entity = null;
-    		String output = null;
     		
-			@Override
-			protected void onPostExecute(Void result) {
-				
-				if(output != null){
-					Toast.makeText(getApplicationContext(), "Feedback Sent", Toast.LENGTH_LONG).show();
-					//Intent i = new Intent(getBaseContext(), Menu.class);
-					finish();
-					//startActivity(i);
-				}
-				
-				super.onPostExecute(result);
-			}
+    		String output = null;
 
 			@Override
 			protected Void doInBackground(Void... params) {
 				HttpClient httpclient = new DefaultHttpClient();
+				HttpEntity entity = null;
+				
 				try{
-					HttpPost httppost = new HttpPost("http://sutest.comuv.com/sendfeedback.php");
+					HttpPost httppost = new HttpPost(SERVER_URL + "sendfeedback.php");
+					
 					List<NameValuePair> par = new ArrayList<NameValuePair>(2);
 					par.add(new BasicNameValuePair("name", sharedPref.getString("userName", "")));
-					par.add(new BasicNameValuePair("feedback", txtfeedback.getText().toString()));
+					par.add(new BasicNameValuePair("feedback", feedback));
 					httppost.setEntity(new UrlEncodedFormEntity(par, "UTF-8"));
+					
 					HttpResponse response = httpclient.execute(httppost);
 					entity = response.getEntity();
 					output = EntityUtils.toString(entity);
@@ -99,6 +82,20 @@ public class Feedback extends Activity {
 				}
 				return null;
 			}
+			
+			@Override
+			protected void onPostExecute(Void result) {
+				super.onPostExecute(result);
+				
+				if(output != null){
+					Toast.makeText(getApplicationContext(), "Feedback Sent", Toast.LENGTH_LONG).show();					
+					finish();
+				}
+				else{
+					Toast.makeText(getApplicationContext(), "Cannot send feedback. No internet connection.", Toast.LENGTH_LONG).show();
+				}
+			}
+
     		
 		}.execute();
     }

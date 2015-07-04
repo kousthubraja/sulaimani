@@ -14,7 +14,7 @@ public class Menu extends Activity {
 	    super.onCreate(savedInstanceState);
 	    this.requestWindowFeature(Window.FEATURE_NO_TITLE);
 	    setContentView(R.layout.activity_menu);
-	    // TODO Auto-generated method stub
+
 	}
 
 	public void openFeedback(View v){

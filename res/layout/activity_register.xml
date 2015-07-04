@@ -4,42 +4,53 @@
     android:layout_height="match_parent"
     android:paddingLeft="10dp"
     android:paddingRight="10dp"
+    android:background="@drawable/burger"
     
-    android:layout_marginTop="60dp"
     android:orientation="vertical" >
     
     <TextView 
         android:text="Register"
         android:layout_gravity="center"
-
-        android:textSize="32dp"
+		android:layout_marginTop="60dp"
+		
+		android:textColor="#ee542a0c"
+        android:textSize="36sp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         />
+    
     <EditText
         android:id="@+id/txtName"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="50dp"
         android:layout_marginTop="30dp"
-        android:gravity="top"
+        android:textColor="#d2691e"
+        android:textColorHint="#bd5e1b"
+        android:background="@drawable/edittext_rounded_corners"
+        android:padding="6dp"
+        android:gravity="center"
         android:hint="Enter your name"
          />
-    
+ 
     <EditText
         android:id="@+id/txtCard"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        android:gravity="top"
-        android:hint="CreditCard Number"
-        
+        android:layout_height="50dp"
+        android:layout_marginTop="30dp"
+        android:textColor="#d2691e"
+        android:textColorHint="#bd5e1b"
+        android:background="@drawable/edittext_rounded_corners"
+        android:padding="6dp"
+        android:gravity="center"
+        android:hint="Credit/Debit Card"
          />
     
     <Button
         android:layout_width="100dp"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="30dp"
+        android:background="@drawable/custombutton"
         android:text="Register"
         android:onClick="registerUser"
          />

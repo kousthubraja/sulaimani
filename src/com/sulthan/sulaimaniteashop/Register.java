@@ -27,7 +27,11 @@ import android.widget.Toast;
 
 public class Register extends Activity {
 
+	private static final String SERVER_URL = "http://sutest.comuv.com/";
+	
+	//SharedPreference to store the user details in the phone
 	SharedPreferences sharedPref;
+	
 	EditText txtName;
 	EditText txtCard;
 	Context context;
@@ -38,7 +42,7 @@ public class Register extends Activity {
 	    super.onCreate(savedInstanceState);
 	    this.requestWindowFeature(Window.FEATURE_NO_TITLE);
 
-	  //Remove notification bar
+	    //Remove notification bar
 	    this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
 	    setContentView(R.layout.activity_register);
@@ -48,6 +52,7 @@ public class Register extends Activity {
 	    sharedPref = getSharedPreferences("userAuth",Context.MODE_PRIVATE);
 	    context = getApplicationContext();
 	    
+	    //Check if user has already registered
 	    if(sharedPref.contains("userId")){
 	    	Intent i = new Intent(getBaseContext(), Menu.class);
 			startActivity(i);
@@ -56,49 +61,35 @@ public class Register extends Activity {
 	}
 	
 	public void registerUser(View v){
+    	
+    	final String name = txtName.getText().toString().trim();
+    	final String card = txtCard.getText().toString().trim();
+    	
+    	if(name.equals("") || card.equals("")){
+    		Toast.makeText(this, "Enter name and credit/debit card", Toast.LENGTH_SHORT).show();
+    		return;
+    	}
+
     	Toast.makeText(this, "Registering...", Toast.LENGTH_SHORT).show();
     	
-    	
-		
-		
-		new AsyncTask<Void, Void, Void>() {
+    	new AsyncTask<Void, Void, Void>() {
 
-    		HttpEntity entity = null;
     		String output = null;
-    		
-			@Override
-			protected void onPostExecute(Void result) {
-				String lines[] = output.split("\\r?\\n");
-				output = lines[0];
-				
-				if(output != null ){
-					SharedPreferences.Editor editor = sharedPref.edit();
-					editor.putString("userName", txtName.getText().toString());
-					editor.putString("userCard", txtCard.getText().toString());
-					editor.putInt("userId", Integer.parseInt(output));
-					editor.commit();
-					
-					Toast.makeText(context, "id = " +output, Toast.LENGTH_SHORT).show();
-					
-					Intent i = new Intent(getBaseContext(), Menu.class);
-					startActivity(i);
-					finish();
-
-				}
-				
-				
-				super.onPostExecute(result);
-			}
 
 			@Override
 			protected Void doInBackground(Void... params) {
 				HttpClient httpclient = new DefaultHttpClient();
+				HttpEntity entity = null;
 				try{
-					HttpPost httppost = new HttpPost("http://sutest.comuv.com/register.php");
+					HttpPost httppost = new HttpPost(SERVER_URL + "register.php");
+					
+					//Prepare arguments to pass in the HttpPost request
 					List<NameValuePair> par = new ArrayList<NameValuePair>(2);
-					par.add(new BasicNameValuePair("name", txtName.getText().toString()));
-					par.add(new BasicNameValuePair("creditCard", txtCard.getText().toString()));
+					par.add(new BasicNameValuePair("name", name));
+					par.add(new BasicNameValuePair("creditCard", card));
 					httppost.setEntity(new UrlEncodedFormEntity(par, "UTF-8"));
+					
+					//Send the request and get the response
 					HttpResponse response = httpclient.execute(httppost);
 					entity = response.getEntity();
 					output = EntityUtils.toString(entity);
@@ -108,12 +99,37 @@ public class Register extends Activity {
 				}
 				return null;
 			}
+			
+			@Override
+			protected void onPostExecute(Void result) {				
+				if(output != null ){
+					String lines[] = output.split("\\r?\\n");
+					output = lines[0];
+
+					//Records the user credentials in sharedPreference locally
+					SharedPreferences.Editor editor = sharedPref.edit();
+					editor.putString("userName", name);
+					editor.putString("userCard", card);
+					editor.putInt("userId", Integer.parseInt(output));
+					editor.commit();
+					
+					Toast.makeText(context, "Registered", Toast.LENGTH_LONG).show();
+
+					//Starts the main menu
+					Intent i = new Intent(getBaseContext(), Menu.class);
+					startActivity(i);
+					finish();
+
+				}
+				else{
+					Toast.makeText(context, "Cannot register. No internet connection.", Toast.LENGTH_LONG).show();
+				}
+				
+				super.onPostExecute(result);
+			}
+
     		
 		}.execute();
-		
-		
 
     }
-	
-
 }
